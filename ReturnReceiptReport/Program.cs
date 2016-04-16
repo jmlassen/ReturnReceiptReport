@@ -14,9 +14,10 @@ namespace ReturnReceiptReport
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GUI());
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new GUI());
+            new ReceiptGrabber().GetReceipts();
         }
     }
 }
