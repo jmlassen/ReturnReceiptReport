@@ -11,18 +11,19 @@ namespace ReturnReceiptReport
         /// <summary>
         /// Public method for getting receipts from the server database
         /// </summary>
-        public void GetReceipts(String server, String database)
+        public void GetReceipts(String server, String database, String table)
         {
             String connectionString = getConnectionString(server, database);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand(getCommandString(), connection);
+                SqlCommand command = new SqlCommand(getCommandString(table), connection);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     Console.WriteLine(reader[0].ToString());
                 }
+                Console.WriteLine("Hi!");
             }
         }
 
@@ -32,9 +33,9 @@ namespace ReturnReceiptReport
             return String.Format("Server={0};Database={1};Integrated Security=true", server, database);
         }
 
-        private String getCommandString()
+        private String getCommandString(String table)
         {
-            return "SELECT * FROM [Products] WHERE [Plu_Number] = \'150\'";
+            return String.Format("SELECT * FROM {0} WHERE [Plu_Number] = \'150\'", table);
         }
     }
 }
