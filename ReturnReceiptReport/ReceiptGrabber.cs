@@ -23,7 +23,6 @@ namespace ReturnReceiptReport
                 {
                     Console.WriteLine(reader[0].ToString());
                 }
-                Console.WriteLine("Hi!");
             }
         }
 
