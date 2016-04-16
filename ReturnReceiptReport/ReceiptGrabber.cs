@@ -11,13 +11,13 @@ namespace ReturnReceiptReport
         /// <summary>
         /// Public method for getting receipts from the server database
         /// </summary>
-        public void GetReceipts()
+        public void GetReceipts(String server, String database)
         {
-            String connectionString = getConnectionString();
+            String connectionString = getConnectionString(server, database);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand("SELECT * FROM [Products] WHERE [Plu_Number] = \'150\'", connection);
+                SqlCommand command = new SqlCommand(getCommandString(), connection);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -26,10 +26,15 @@ namespace ReturnReceiptReport
             }
         }
 
-        private String getConnectionString()
+        private String getConnectionString(String server, String database)
         {
             // We are just pretending this works. That's what I get for trying to connect on my personal laptop.
-            return "Server=00LSRV02;Database=StoreTender;Integrated Security=true";
+            return String.Format("Server={0};Database={1};Integrated Security=true", server, database);
+        }
+
+        private String getCommandString()
+        {
+            return "SELECT * FROM [Products] WHERE [Plu_Number] = \'150\'";
         }
     }
 }
