@@ -13,7 +13,8 @@ namespace ReturnReceiptReport
         /// </summary>
         public void GetReceipts()
         {
-            using (SqlConnection connection = new SqlConnection("Server=00LSRV02;Database=StoreTender;Integrated Security=true"))
+            String connectionString = getConnectionString();
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT * FROM [Products] WHERE [Plu_Number] = \'150\'", connection);
@@ -23,6 +24,12 @@ namespace ReturnReceiptReport
                     Console.WriteLine(reader[0].ToString());
                 }
             }
+        }
+
+        private String getConnectionString()
+        {
+            // We are just pretending this works. That's what I get for trying to connect on my personal laptop.
+            return "Server=00LSRV02;Database=StoreTender;Integrated Security=true";
         }
     }
 }
