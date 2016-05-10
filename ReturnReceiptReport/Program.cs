@@ -17,7 +17,9 @@ namespace ReturnReceiptReport
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new GUI());
-            new ReceiptGrabber().GetReceipts();
+
+            // Run report from last month
+            new ReceiptReportRunner().RunReportGivenDate(DateTime.Now.AddMonths(-1), DateTime.Now);
         }
     }
 }

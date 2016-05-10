@@ -8,22 +8,16 @@ namespace ReturnReceiptReport
     /// </summary>
     class ReceiptGrabber
     {
-        /// <summary>
-        /// Public method for getting receipts from the server database
-        /// </summary>
-        public void GetReceipts(String server, String database, String table)
+        public SqlDataReader GetReceipts(String server, String database, String table)
         {
             String connectionString = getConnectionString(server, database);
+            SqlCommand command;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand(getCommandString(table), connection);
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    Console.WriteLine(reader[0].ToString());
-                }
+                command = new SqlCommand(getCommandString(table), connection);
             }
+            return command.ExecuteReader();
         }
 
         private String getConnectionString(String server, String database)
@@ -32,9 +26,15 @@ namespace ReturnReceiptReport
             return String.Format("Server={0};Database={1};Integrated Security=true", server, database);
         }
 
-        private String getCommandString(String table)
+        private String getCommandString(String table, String transactionNumberField, String receiptTextField)
         {
-            return String.Format("SELECT * FROM {0} WHERE [Plu_Number] = \'150\'", table);
+            return String.Format("SELECT * " + 
+                                 "FROM {0} WHERE {1} IN ( " +
+                                 "   SELECT {1} " +
+                                 "   FROM {0} " +
+                                 "   WHERE "
+                                 
+                                 , table, transactionNumberField, receiptTextField);
         }
     }
 }
